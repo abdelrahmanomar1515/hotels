@@ -1,0 +1,5 @@
+export interface MapMarker {
+  lat: number;
+  lng: number;
+  label?: string;
+}
