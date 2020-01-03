@@ -4,6 +4,7 @@ import { HotelsService } from '../services/hotels.service';
 import { MapMarker } from '../models/map-marker';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { Place } from '../models/here-autosuggest-response';
 
 @Component({
   selector: 'app-hotels-map',
@@ -34,14 +35,12 @@ export class HotelsMapComponent {
 
   constructor(private hotelsService: HotelsService) {}
 
-  clickedMarker(label: string, index: number) {
-    console.log(`clicked the marker: ${label || index}`);
+  hotelTrackByFunction(index: number, item: Partial<Place>) {
+    return item.id;
   }
 
-  mapClicked($event: MouseEvent) {}
-
-  markerDragEnd(m: MapMarker, $event: MouseEvent) {
-    console.log('dragEnd', m, $event);
+  clickedMarker(label: string, index: number) {
+    console.log(`clicked the marker: ${label || index}`);
   }
 
   onCenterChange(event: LatLngLiteral) {

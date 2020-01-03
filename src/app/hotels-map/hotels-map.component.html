@@ -5,12 +5,11 @@
          [zoomControl]="true"
          (centerChange)="onCenterChange($event)">
 
-  <agm-marker *ngFor="let m of hotels$ | async; let i = index"
-              (markerClick)="clickedMarker(m.label, i)"
-              [latitude]="m.lat"
-              [longitude]="m.lng"
-              [label]="m.label"
-              (dragEnd)="markerDragEnd(m, $event)">
+  <agm-marker *ngFor="let hotel of hotels$ | async; let i = index; trackBy: hotelTrackByFunction"
+              (markerClick)="clickedMarker(hotel.label, i)"
+              [latitude]="hotel.lat"
+              [longitude]="hotel.lng"
+              [label]="i">
 
     <agm-info-window>
       <strong>InfoWindow content</strong>
