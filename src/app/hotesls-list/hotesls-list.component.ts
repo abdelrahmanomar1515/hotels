@@ -16,7 +16,9 @@ export class HoteslsListComponent {
   hotels$: Observable<Hotel[]> = this.hotelsService.hotels$.pipe(
     tap((el) => console.log(el))
   );
+
   constructor(public hotelsService: HotelsService) {}
+
   hotelTrackByFunction(index: number, item: Partial<Hotel>) {
     return item.id;
   }

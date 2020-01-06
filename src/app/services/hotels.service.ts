@@ -11,16 +11,15 @@ import { Hotel } from '../models/hotel';
   providedIn: 'root'
 })
 export class HotelsService {
+  private loadingSubject = new Subject<boolean>();
   private hotelsRequested = new Subject<LatLngLiteral>();
 
-  private loadingSubject$ = new Subject<boolean>();
-  loading$: Observable<boolean> = this.loadingSubject$.asObservable();
-
+  loading$: Observable<boolean> = this.loadingSubject.asObservable();
   hotels$: Observable<Hotel[]> = this.hotelsRequested.asObservable().pipe(
     debounceTime(400),
-    tap(() => this.loadingSubject$.next(true)),
+    tap(() => this.loadingSubject.next(true)),
     switchMap((location) =>
-      this._getHotels(location).pipe(catchError((error) => EMPTY))
+      this.getHotels(location).pipe(catchError((error) => EMPTY))
     ),
     map(
       (res) =>
@@ -28,7 +27,7 @@ export class HotelsService {
           (res.results.filter((hotel) => hotel.position) as Hotel[])) ||
         []
     ),
-    tap(() => this.loadingSubject$.next(false))
+    tap(() => this.loadingSubject.next(false))
   );
 
   constructor(private http: HttpClient) {}
@@ -37,7 +36,7 @@ export class HotelsService {
     this.hotelsRequested.next(location);
   }
 
-  private _getHotels({ lat, lng }: LatLngLiteral) {
+  private getHotels({ lat, lng }: LatLngLiteral) {
     const params = {
       apiKey: environment.hereAPIKey,
       at: `${lat},${lng}`,
