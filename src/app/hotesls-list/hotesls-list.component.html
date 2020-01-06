@@ -1,8 +1,12 @@
-<div class="container">
+<div class="container"
+     *ngIf="{ loading: loading$ | async,
+              hotels: hotels$ | async
+            } as vm">
   <h1 class="header">Places</h1>
-  <div class="hotels-list">
+  <div class="hotels-list"
+       *ngIf="!vm.loading; else loading">
     <div class="hotel-card"
-         *ngFor="let hotel of hotels$ | async">
+         *ngFor="let hotel of vm.hotels; trackBy: hotelTrackByFunction">
       <h3 class="card-title">
         {{ hotel.title }}
       </h3>
@@ -11,4 +15,5 @@
         minima iste</p>
     </div>
   </div>
+  <ng-template #loading>Loading...</ng-template>
 </div>

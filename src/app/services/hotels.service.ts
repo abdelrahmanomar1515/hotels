@@ -4,7 +4,7 @@ import { LatLngLiteral } from '@agm/core';
 import { environment } from 'src/environments/environment';
 import { DiscoverResponse } from '../models/here-autosuggest-response';
 import { Subject, Observable, EMPTY } from 'rxjs';
-import { debounceTime, switchMap, map, catchError } from 'rxjs/operators';
+import { debounceTime, switchMap, map, catchError, tap } from 'rxjs/operators';
 import { Hotel } from '../models/hotel';
 
 @Injectable({
@@ -13,8 +13,12 @@ import { Hotel } from '../models/hotel';
 export class HotelsService {
   private hotelsRequested = new Subject<LatLngLiteral>();
 
+  private loadingSubject$ = new Subject<boolean>();
+  loading$: Observable<boolean> = this.loadingSubject$.asObservable();
+
   hotels$: Observable<Hotel[]> = this.hotelsRequested.asObservable().pipe(
     debounceTime(400),
+    tap(() => this.loadingSubject$.next(true)),
     switchMap((location) =>
       this._getHotels(location).pipe(catchError((error) => EMPTY))
     ),
@@ -23,7 +27,8 @@ export class HotelsService {
         (res.results &&
           (res.results.filter((hotel) => hotel.position) as Hotel[])) ||
         []
-    )
+    ),
+    tap(() => this.loadingSubject$.next(false))
   );
 
   constructor(private http: HttpClient) {}
