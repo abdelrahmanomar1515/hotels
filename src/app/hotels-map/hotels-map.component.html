@@ -8,13 +8,7 @@
   <agm-marker *ngFor="let hotel of hotels$ | async; let i = index; trackBy: hotelTrackByFunction"
               (markerClick)="clickedMarker(hotel.label, i)"
               [latitude]="hotel.lat"
-              [longitude]="hotel.lng"
-              [label]="i">
-
-    <agm-info-window>
-      <strong>InfoWindow content</strong>
-    </agm-info-window>
-
+              [longitude]="hotel.lng">
   </agm-marker>
 
 </agm-map>

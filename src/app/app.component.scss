@@ -1,11 +1,13 @@
 :host {
+  height: 100vh;
   display: flex;
   app-hotels-map {
-    height: 100vh;
-    flex: 2 0 auto;
+    height: 100%;
+    flex: 0 0 50%;
   }
   .side-content {
     height: 100%;
-    flex: 1 0 auto;
+    overflow-y: scroll;
+    flex: 0 0 50%;
   }
 }

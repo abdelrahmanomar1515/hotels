@@ -1,0 +1,14 @@
+<div class="container">
+  <h1 class="header">Places</h1>
+  <div class="hotels-list">
+    <div class="hotel-card"
+         *ngFor="let hotel of hotels$ | async">
+      <h3 class="card-title">
+        {{ hotel.title }}
+      </h3>
+      <p class="card-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        Nemo nihil vitae officiis! Nam eos laudantium quia
+        minima iste</p>
+    </div>
+  </div>
+</div>

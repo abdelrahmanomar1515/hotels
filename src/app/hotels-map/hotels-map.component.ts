@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  AfterViewInit
+} from '@angular/core';
 import { MouseEvent, LatLngLiteral } from '@agm/core';
 import { HotelsService } from '../services/hotels.service';
 import { MapMarker } from '../models/map-marker';
@@ -9,31 +14,34 @@ import { Place } from '../models/here-autosuggest-response';
 @Component({
   selector: 'app-hotels-map',
   templateUrl: './hotels-map.component.html',
-  styleUrls: ['./hotels-map.component.scss']
+  styleUrls: ['./hotels-map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HotelsMapComponent {
+export class HotelsMapComponent implements AfterViewInit {
   hotels$: Observable<MapMarker[]> = this.hotelsService.hotels$.pipe(
     map((hotels) =>
-      hotels
-        .filter((hotel) => hotel.position)
-        .map((hotel) => {
-          return {
-            lat: hotel.position && hotel.position[0],
-            lng: hotel.position && hotel.position[1],
-            label: hotel.title
-          };
-        })
+      hotels.map((hotel) => {
+        return {
+          lat: hotel.position && hotel.position[0],
+          lng: hotel.position && hotel.position[1],
+          label: hotel.title
+        };
+      })
     )
   );
 
   // google maps zoom level
-  zoom = 8;
+  zoom = 12;
 
   // initial center position for the map
   lat = 51.673858;
   lng = 7.815982;
 
   constructor(private hotelsService: HotelsService) {}
+
+  ngAfterViewInit() {
+    this.hotelsService.locationChange({ lat: this.lat, lng: this.lng });
+  }
 
   hotelTrackByFunction(index: number, item: Partial<Place>) {
     return item.id;
@@ -44,7 +52,6 @@ export class HotelsMapComponent {
   }
 
   onCenterChange(event: LatLngLiteral) {
-    console.log(event);
     this.hotelsService.locationChange(event);
   }
 }

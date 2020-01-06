@@ -6,8 +6,9 @@ import { AppComponent } from "./app.component";
 import { AgmCoreModule } from "@agm/core";
 import { HotelsMapComponent } from "./hotels-map/hotels-map.component";
 import { HttpClientModule } from "@angular/common/http";
+import { HoteslsListComponent } from './hotesls-list/hotesls-list.component';
 @NgModule({
-  declarations: [AppComponent, HotelsMapComponent],
+  declarations: [AppComponent, HotelsMapComponent, HoteslsListComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

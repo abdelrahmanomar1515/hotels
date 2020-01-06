@@ -1,0 +1,28 @@
+.container {
+  padding: 1rem;
+  .header {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #292929;
+  }
+
+  .hotels-list {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .hotel-card {
+      padding: 1.1rem 0;
+      border-bottom: 1px solid #cdcdcd;
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin-bottom: 10px;
+      }
+      .card-description {
+        font-size: 1.2rem;
+        color: #1d1d1d;
+      }
+    }
+  }
+}

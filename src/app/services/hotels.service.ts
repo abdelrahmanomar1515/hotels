@@ -5,25 +5,31 @@ import { environment } from 'src/environments/environment';
 import { DiscoverResponse } from '../models/here-autosuggest-response';
 import { Subject, Observable, EMPTY } from 'rxjs';
 import { debounceTime, switchMap, map, catchError } from 'rxjs/operators';
+import { Hotel } from '../models/hotel';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HotelsService {
-  private _hotelsRequested = new Subject<LatLngLiteral>();
+  private hotelsRequested = new Subject<LatLngLiteral>();
 
-  hotels$: Observable<any[]> = this._hotelsRequested.asObservable().pipe(
+  hotels$: Observable<Hotel[]> = this.hotelsRequested.asObservable().pipe(
     debounceTime(400),
     switchMap((location) =>
       this._getHotels(location).pipe(catchError((error) => EMPTY))
     ),
-    map((res) => res.results)
+    map(
+      (res) =>
+        (res.results &&
+          (res.results.filter((hotel) => hotel.position) as Hotel[])) ||
+        []
+    )
   );
 
   constructor(private http: HttpClient) {}
 
   locationChange(location: LatLngLiteral) {
-    this._hotelsRequested.next(location);
+    this.hotelsRequested.next(location);
   }
 
   private _getHotels({ lat, lng }: LatLngLiteral) {
